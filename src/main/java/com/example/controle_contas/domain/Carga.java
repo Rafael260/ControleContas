@@ -1,5 +1,8 @@
 package com.example.controle_contas.domain;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Carga extends Transacao {
 
 	public Carga(Conta contaEnvolvida, Double valor) {

@@ -1,9 +1,18 @@
 package com.example.controle_contas.domain;
 
+import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
+
+@Entity
 public class PessoaJuridica extends Pessoa {
 
+	@NotNull
 	private String cnpj;
+	
+	@NotNull
 	private String razaoSocial;
+	
+	@NotNull
 	private String nomeFantasia;
 	
 	public PessoaJuridica(String cnpj, String razaoSocial, String nomeFantasia) {

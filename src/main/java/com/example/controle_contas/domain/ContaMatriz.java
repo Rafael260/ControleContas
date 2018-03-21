@@ -1,11 +1,12 @@
 package com.example.controle_contas.domain;
 
-import java.time.LocalDateTime;
+import javax.persistence.Entity;
 
+@Entity
 public class ContaMatriz extends Conta {
 
-	public ContaMatriz(String nome, LocalDateTime dataCriacao, Pessoa pessoa) {
-		super(nome, dataCriacao, pessoa);
+	public ContaMatriz(String nome, Pessoa pessoa) {
+		super(nome, pessoa);
 	}
 
 }

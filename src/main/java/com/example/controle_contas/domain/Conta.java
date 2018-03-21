@@ -2,19 +2,40 @@ package com.example.controle_contas.domain;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
+import org.springframework.data.annotation.CreatedDate;
+
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "tipo_conta")
 public abstract class Conta {
 
+	@Id
+	@GeneratedValue
 	protected Long id;
-	protected String nome;
+	
+	protected String numero;
+	
+	@CreatedDate 
 	protected LocalDateTime dataCriacao;
+	
+	@OneToOne
+	@JoinColumn
 	protected Pessoa pessoa;
 //	protected List<ContaFilial> contasFilhas;
 	protected SituacaoConta situacaoConta;
 	
-	public Conta(String nome, LocalDateTime dataCriacao, Pessoa pessoa) {
+	public Conta(String numero, Pessoa pessoa) {
 		super();
-		this.nome = nome;
-		this.dataCriacao = dataCriacao;
+		this.numero = numero;
 		this.pessoa = pessoa;
 //		this.contasFilhas = new LinkedList<>();
 		this.situacaoConta = SituacaoConta.ATIVA;
@@ -26,11 +47,11 @@ public abstract class Conta {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getNome() {
-		return nome;
+	public String getNumero() {
+		return numero;
 	}
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setNumero(String numero) {
+		this.numero = numero;
 	}
 	public LocalDateTime getDataCriacao() {
 		return dataCriacao;

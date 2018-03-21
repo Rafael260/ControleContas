@@ -1,13 +1,16 @@
 package com.example.controle_contas.domain;
 
-import java.time.LocalDateTime;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
+@Entity
 public class ContaFilial extends Conta {
 
+	@ManyToOne
 	private Conta contaPai;
 	
-	public ContaFilial(String nome, LocalDateTime dataCriacao, Pessoa pessoa) {
-		super(nome, dataCriacao, pessoa);
+	public ContaFilial(String nome, Pessoa pessoa) {
+		super(nome, pessoa);
 		// TODO Auto-generated constructor stub
 	}
 
