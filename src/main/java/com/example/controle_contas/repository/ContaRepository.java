@@ -1,13 +1,12 @@
 package com.example.controle_contas.repository;
 
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.stereotype.Repository;
 
 import com.example.controle_contas.domain.Conta;
 
-@NoRepositoryBean
-public interface ContaRepository<T extends Conta> extends CrudRepository<T, Long>{
+@Repository
+public interface ContaRepository<E extends Conta> extends AbstractRepository<E>{
 
-	public T findByNumero(String numero);
+	public E findByNumero(String numero);
 }
