@@ -7,16 +7,12 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
-import org.springframework.data.annotation.CreatedDate;
-
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-//@DiscriminatorColumn(name = "tipo_conta")
 public abstract class Conta extends AbstractEntity{
 
 	protected String numero;
 	
-	@CreatedDate 
 	protected LocalDateTime dataCriacao;
 	
 	@OneToOne
@@ -24,6 +20,10 @@ public abstract class Conta extends AbstractEntity{
 	protected Pessoa pessoa;
 //	protected List<ContaFilial> contasFilhas;
 	protected SituacaoConta situacaoConta;
+	
+	public Conta() {
+		this.situacaoConta = SituacaoConta.ATIVA;
+	}
 	
 	public Conta(String numero, Pessoa pessoa) {
 		super();

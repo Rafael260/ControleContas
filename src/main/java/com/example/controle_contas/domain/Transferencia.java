@@ -9,6 +9,10 @@ public class Transferencia extends Transacao {
 	@ManyToOne
 	protected Conta contaOrigem;
 	
+	public Transferencia() {
+		super();
+	}
+	
 	public Transferencia(Conta contaOrigem, Conta contaEnvolvida, Double valor) {
 		super(contaEnvolvida, valor);
 		this.contaOrigem = contaOrigem;

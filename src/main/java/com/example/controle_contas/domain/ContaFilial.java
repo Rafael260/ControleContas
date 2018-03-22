@@ -9,6 +9,10 @@ public class ContaFilial extends Conta {
 	@ManyToOne
 	private Conta contaPai;
 	
+	public ContaFilial() {
+		super();
+	}
+	
 	public ContaFilial(String nome, Pessoa pessoa) {
 		super(nome, pessoa);
 		// TODO Auto-generated constructor stub

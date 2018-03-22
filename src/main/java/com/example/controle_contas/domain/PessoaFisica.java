@@ -16,6 +16,10 @@ public class PessoaFisica extends Pessoa {
 	
 	private LocalDateTime dataNascimento;
 	
+	public PessoaFisica() {
+		
+	}
+	
 	public PessoaFisica(String cpf, String nomeCompleto, LocalDateTime dataNascimento) {
 		this.cpf = cpf;
 		this.nomeCompleto = nomeCompleto;

@@ -5,6 +5,10 @@ import javax.persistence.Entity;
 @Entity
 public class ContaMatriz extends Conta {
 
+	public ContaMatriz() {
+		super();
+	}
+	
 	public ContaMatriz(String nome, Pessoa pessoa) {
 		super(nome, pessoa);
 	}

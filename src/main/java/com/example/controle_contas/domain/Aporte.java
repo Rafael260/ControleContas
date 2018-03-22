@@ -9,6 +9,10 @@ public class Aporte extends Transferencia {
 	@NotNull
 	private String codigo;
 	
+	public Aporte() {
+		
+	}
+	
 	public Aporte(Conta contaOrigem, Conta contaEnvolvida, Double valor, String codigo) {
 		super(contaOrigem, contaEnvolvida, valor);
 		this.codigo = codigo;

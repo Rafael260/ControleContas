@@ -1,14 +1,21 @@
 package com.example.controle_contas.domain;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
-import org.springframework.data.jpa.domain.AbstractPersistable;
-
 @MappedSuperclass
-public class AbstractEntity extends AbstractPersistable<Long> {
+public class AbstractEntity {
 
-	@Override
+	@Id
+	@GeneratedValue
+	protected Long id;
+	
+	public Long getId() {
+		return this.id;
+	}
+	
 	public void setId(Long id) {
-		super.setId(id);
+		this.id = id;
 	}
 }

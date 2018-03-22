@@ -24,6 +24,10 @@ public abstract class Transacao extends AbstractEntity {
 	
 	protected boolean estornada;
 	
+	public Transacao() {
+		
+	}
+	
 	public Transacao(Conta contaEnvolvida, Double valor) {
 		this.valor = valor;
 		this.contaEnvolvida = contaEnvolvida;

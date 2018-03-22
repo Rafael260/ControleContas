@@ -15,6 +15,10 @@ public class PessoaJuridica extends Pessoa {
 	@NotNull
 	private String nomeFantasia;
 	
+	public PessoaJuridica() {
+		
+	}
+	
 	public PessoaJuridica(String cnpj, String razaoSocial, String nomeFantasia) {
 		super();
 		this.cnpj = cnpj;
