@@ -3,8 +3,6 @@ package com.example.controle_contas.domain;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
@@ -13,12 +11,8 @@ import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Inheritance
-public abstract class Transacao {
+public abstract class Transacao extends AbstractEntity {
 
-	@Id
-	@GeneratedValue
-	protected Long id;
-	
 	@NotNull
 	protected Double valor;
 	

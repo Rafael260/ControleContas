@@ -1,18 +1,11 @@
 package com.example.controle_contas.service;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import com.example.controle_contas.exceptions.TransacaoInvalidaException;
+import com.example.controle_contas.domain.Conta;
 
-@Service
-public class ContaService {
+@Component
+public class ContaService extends AbstractService<Conta>{
 
-	public ContaService() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	public void validarTransacao() throws TransacaoInvalidaException{
-		
-	}
 
 }

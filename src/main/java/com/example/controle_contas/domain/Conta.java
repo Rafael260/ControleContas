@@ -1,11 +1,7 @@
 package com.example.controle_contas.domain;
 
 import java.time.LocalDateTime;
-
-import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -15,13 +11,9 @@ import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "tipo_conta")
-public abstract class Conta {
+//@DiscriminatorColumn(name = "tipo_conta")
+public abstract class Conta extends AbstractEntity{
 
-	@Id
-	@GeneratedValue
-	protected Long id;
-	
 	protected String numero;
 	
 	@CreatedDate 
@@ -41,12 +33,6 @@ public abstract class Conta {
 		this.situacaoConta = SituacaoConta.ATIVA;
 	}
 	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
 	public String getNumero() {
 		return numero;
 	}

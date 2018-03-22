@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,11 +13,15 @@ import com.example.controle_contas.domain.Conta;
 import com.example.controle_contas.domain.ContaMatriz;
 import com.example.controle_contas.domain.Pessoa;
 import com.example.controle_contas.domain.PessoaFisica;
+import com.example.controle_contas.service.ContaService;
 
 @RestController
 @RequestMapping("/contas")
 public class ContaController {
 
+	@Autowired
+	ContaService contaService;
+	
 	public ContaController() {
 		// TODO Auto-generated constructor stub
 	}
