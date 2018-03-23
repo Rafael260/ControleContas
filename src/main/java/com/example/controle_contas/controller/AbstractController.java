@@ -2,17 +2,16 @@ package com.example.controle_contas.controller;
 
 import java.util.List;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import com.example.controle_contas.domain.AbstractEntity;
+import com.example.controle_contas.domain.Pessoa;
+import com.example.controle_contas.domain.PessoaFisica;
+import com.example.controle_contas.domain.PessoaJuridica;
 import com.example.controle_contas.service.AbstractService;
 
 public abstract class AbstractController<S extends AbstractService<E>, E extends AbstractEntity> {
@@ -23,17 +22,28 @@ public abstract class AbstractController<S extends AbstractService<E>, E extends
 	public AbstractController() {
 	}
 
-	@GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.GET, value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<E> findAll(){
 		return this.service.findAll();
 	}
 	
-	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public E findById(@PathParam("id") Long id) {
-		return this.service.findById(id);
+	@RequestMapping(method = RequestMethod.GET, value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public E findById(@PathVariable("id") Long id) {
+		System.out.println("Chamou o metodo de findById");
+		E element = this.service.findById(id);
+		if(element instanceof PessoaFisica) {
+			System.out.println("Elemento eh uma pessoa física!");
+		}
+		else if(element instanceof PessoaJuridica) {
+			System.out.println("Elemento eh uma pessoa juridica!");
+		}
+		else if (element instanceof Pessoa) {
+			System.out.println("Elemento eh uma pessoa abstrata!!!!");
+		}
+		return element;
 	}
 	
-	@PostMapping(value = "/insert", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.POST, value = "/insert", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public E insert(@RequestBody E entityObject) {
 		onBeforeInsert(entityObject);
 		entityObject = this.service.insert(entityObject);
@@ -41,7 +51,7 @@ public abstract class AbstractController<S extends AbstractService<E>, E extends
 		return entityObject;
 	}
 	
-	@PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.PUT, value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public E update(@RequestBody E entityObject) {
 		onBeforeUpdate(entityObject);
 		entityObject = this.service.update(entityObject);
@@ -49,7 +59,7 @@ public abstract class AbstractController<S extends AbstractService<E>, E extends
 		return entityObject;
 	}
 	
-	@DeleteMapping(value = "/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.DELETE, value = "/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void delete(@RequestBody E entityObject) {
 		onBeforeDelete(entityObject);
 		this.service.delete(entityObject);

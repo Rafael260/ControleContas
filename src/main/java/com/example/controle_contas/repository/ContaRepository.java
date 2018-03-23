@@ -8,5 +8,4 @@ import com.example.controle_contas.domain.Conta;
 @Repository
 public interface ContaRepository<E extends Conta> extends AbstractRepository<E>{
 
-	public E findByNumero(String numero);
 }

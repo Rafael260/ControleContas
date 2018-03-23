@@ -1,13 +1,9 @@
 package com.example.controle_contas.service;
 
 import java.util.List;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.controle_contas.domain.AbstractEntity;
 import com.example.controle_contas.repository.AbstractRepository;
 
-@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public abstract class AbstractService<E extends AbstractEntity> {
 
 	protected AbstractRepository<E> repositorioGenerico;
@@ -33,7 +29,7 @@ public abstract class AbstractService<E extends AbstractEntity> {
 		}
 	}
 
-	public E update(@RequestBody E entityObject) {
+	public E update(E entityObject) {
 		if (entityObject == null || entityObject.getId() == null) {
 			return null;
 		} else {
@@ -41,7 +37,7 @@ public abstract class AbstractService<E extends AbstractEntity> {
 		}
 	}
 	
-	public void delete(@RequestBody E entityObject) {
+	public void delete(E entityObject) {
 		if(entityObject != null) {
 			this.repositorioGenerico.delete(entityObject);
 		}
