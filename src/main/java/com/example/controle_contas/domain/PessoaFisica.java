@@ -2,10 +2,12 @@ package com.example.controle_contas.domain;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@DiscriminatorValue("pessoa_fisica")
 public class PessoaFisica extends Pessoa {
 
 	@NotNull
@@ -17,10 +19,11 @@ public class PessoaFisica extends Pessoa {
 	private LocalDateTime dataNascimento;
 	
 	public PessoaFisica() {
-		
+		super();
 	}
 	
 	public PessoaFisica(String cpf, String nomeCompleto, LocalDateTime dataNascimento) {
+		super();
 		this.cpf = cpf;
 		this.nomeCompleto = nomeCompleto;
 		this.dataNascimento = dataNascimento;

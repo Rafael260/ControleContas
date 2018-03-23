@@ -1,9 +1,11 @@
 package com.example.controle_contas.domain;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 @Entity
+@DiscriminatorValue("conta_filial")
 public class ContaFilial extends Conta {
 
 	@ManyToOne

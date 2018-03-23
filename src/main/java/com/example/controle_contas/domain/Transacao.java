@@ -2,15 +2,18 @@ package com.example.controle_contas.domain;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
 
 @Entity
-@Inheritance
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="tipo_transacao")
 public abstract class Transacao extends AbstractEntity {
 
 	@NotNull
@@ -25,13 +28,12 @@ public abstract class Transacao extends AbstractEntity {
 	protected boolean estornada;
 	
 	public Transacao() {
-		
+		estornada = false;
 	}
 	
 	public Transacao(Conta contaEnvolvida, Double valor) {
 		this.valor = valor;
 		this.contaEnvolvida = contaEnvolvida;
-		data = LocalDateTime.now();
 		estornada = false;
 	}
 

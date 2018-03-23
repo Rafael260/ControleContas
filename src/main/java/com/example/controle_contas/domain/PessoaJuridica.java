@@ -1,9 +1,11 @@
 package com.example.controle_contas.domain;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@DiscriminatorValue("pessoa_juridica")
 public class PessoaJuridica extends Pessoa {
 
 	@NotNull
@@ -16,7 +18,7 @@ public class PessoaJuridica extends Pessoa {
 	private String nomeFantasia;
 	
 	public PessoaJuridica() {
-		
+		super();
 	}
 	
 	public PessoaJuridica(String cnpj, String razaoSocial, String nomeFantasia) {
