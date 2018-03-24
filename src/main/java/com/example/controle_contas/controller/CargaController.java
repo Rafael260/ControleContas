@@ -8,10 +8,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.controle_contas.controller.util.GeradorJson;
+import com.example.controle_contas.domain.Carga;
 import com.example.controle_contas.domain.Conta;
 import com.example.controle_contas.exceptions.TransacaoInvalidaException;
 import com.example.controle_contas.service.CargaService;
 import com.example.controle_contas.service.ContaService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController
 @RequestMapping("/cargas")
@@ -23,11 +26,14 @@ public class CargaController {
 	@Autowired
 	private ContaService contaService;
 	
+	GeradorJson geradorJson;
+	
 	public CargaController() {
+		geradorJson = new GeradorJson();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/criar")
-	public ResponseEntity<?> carregar(@RequestParam("idConta") Long idConta, @RequestParam("valor") Double valor){
+	public ResponseEntity<?> carregar(@RequestParam("idConta") Long idConta, @RequestParam("valor") Double valor) throws JsonProcessingException{
 		if(idConta == null || valor == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -36,8 +42,8 @@ public class CargaController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		try {
-			cargaService.carregarConta(conta, valor);
-			return new ResponseEntity<>(HttpStatus.OK);
+			Carga carga = cargaService.carregarConta(conta, valor);
+			return new ResponseEntity<>(geradorJson.gerarJson(carga),HttpStatus.OK);
 		} catch (TransacaoInvalidaException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}

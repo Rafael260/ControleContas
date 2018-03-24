@@ -1,6 +1,6 @@
 package com.example.controle_contas.domain;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -16,13 +16,13 @@ public class PessoaFisica extends Pessoa {
 	@NotNull
 	private String nomeCompleto;
 	
-	private LocalDateTime dataNascimento;
+	private LocalDate dataNascimento;
 	
 	public PessoaFisica() {
 		super();
 	}
 	
-	public PessoaFisica(String cpf, String nomeCompleto, LocalDateTime dataNascimento) {
+	public PessoaFisica(String cpf, String nomeCompleto, LocalDate dataNascimento) {
 		super();
 		this.cpf = cpf;
 		this.nomeCompleto = nomeCompleto;
@@ -45,11 +45,11 @@ public class PessoaFisica extends Pessoa {
 		this.nomeCompleto = nomeCompleto;
 	}
 
-	public LocalDateTime getDataNascimento() {
+	public LocalDate getDataNascimento() {
 		return dataNascimento;
 	}
 
-	public void setDataNascimento(LocalDateTime dataNascimento) {
+	public void setDataNascimento(LocalDate dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
 	

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.controle_contas.domain.Carga;
 import com.example.controle_contas.domain.Conta;
-import com.example.controle_contas.domain.Transacao;
 import com.example.controle_contas.exceptions.TransacaoInvalidaException;
 import com.example.controle_contas.repository.CargaRepository;
 
@@ -33,14 +32,15 @@ public class CargaService extends AbstractService<Carga>{
 		}
 	}
 	
-	public void carregarConta(Conta conta, Double valor) throws TransacaoInvalidaException{
+	public Carga carregarConta(Conta conta, Double valor) throws TransacaoInvalidaException{
 		validarCarga(conta, valor);
 		
 		conta.acrescentarValor(valor);
 		contaService.update(conta);
-		Transacao carga = new Carga();
+		Carga carga = new Carga();
 		carga.setContaEnvolvida(conta);
 		carga.setValor(valor);
 		transacaoService.insert(carga);
+		return carga;
 	}
 }

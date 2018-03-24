@@ -1,6 +1,6 @@
 package com.example.controle_contas.service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class ContaService extends AbstractService<Conta>{
 	
 	@Override
 	public void onBeforeInsert(Conta entityToPersist) {
-		entityToPersist.setDataCriacao(LocalDateTime.now());
+		entityToPersist.setDataCriacao(LocalDate.now());
 		super.onBeforeInsert(entityToPersist);
 	}
 }

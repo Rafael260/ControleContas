@@ -9,52 +9,43 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.controle_contas.controller.util.GeradorJson;
-import com.example.controle_contas.domain.Aporte;
 import com.example.controle_contas.domain.Conta;
-import com.example.controle_contas.domain.ContaMatriz;
+import com.example.controle_contas.domain.Debito;
 import com.example.controle_contas.exceptions.TransacaoInvalidaException;
-import com.example.controle_contas.service.AporteService;
-import com.example.controle_contas.service.ContaMatrizService;
 import com.example.controle_contas.service.ContaService;
+import com.example.controle_contas.service.DebitoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController
-@RequestMapping("/aportes")
-public class AporteController {
-
-	@Autowired
-	private AporteService aporteService;
+@RequestMapping("/debitos")
+public class DebitoController {
 
 	@Autowired
 	private ContaService contaService;
-
+	
 	@Autowired
-	private ContaMatrizService contaMatrizService;
-
+	private DebitoService debitoService;
+	
 	GeradorJson geradorJson;
 	
-	public AporteController() {
+	public DebitoController() {
 		geradorJson = new GeradorJson();
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/criar")
-	public ResponseEntity<?> criar(@RequestParam("idContaOrigem") Long idContaOrigem,
-			@RequestParam("idContaDestino") Long idContaDestino, @RequestParam("valor") Double valor) throws JsonProcessingException {
-		if (idContaOrigem == null || idContaDestino == null || valor == null) {
+	@RequestMapping(method = RequestMethod.GET, value="/criar")
+	public ResponseEntity<?> debitar(@RequestParam("idConta") Long idConta, @RequestParam("valor") Double valor) throws JsonProcessingException{
+		if(idConta == null || valor == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		Conta contaOrigem = contaService.findById(idContaOrigem);
-		ContaMatriz contaDestino = contaMatrizService.findById(idContaDestino);
-		if (contaOrigem == null || contaDestino == null) {
+		Conta conta = contaService.findById(idConta);
+		if(conta == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		try {
-			Aporte aporte = aporteService.enviarAporte(contaOrigem, contaDestino, valor);
-			return new ResponseEntity<String>(geradorJson.gerarJson(aporte),HttpStatus.OK);
+			Debito debito = debitoService.debitarConta(conta, valor);
+			return new ResponseEntity<>(geradorJson.gerarJson(debito),HttpStatus.OK);
 		} catch (TransacaoInvalidaException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		
 	}
-
 }

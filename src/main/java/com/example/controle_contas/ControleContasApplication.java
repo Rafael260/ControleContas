@@ -1,6 +1,6 @@
 package com.example.controle_contas;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -31,10 +31,10 @@ public class ControleContasApplication {
 	@Bean
 	public CommandLineRunner init(PessoaController pessoaController, ContaController contaController) {
 		return (args) -> {
-			Pessoa pessoa1 = new PessoaFisica("111.111.111-11", "Fulano de tal", LocalDateTime.now());
+			Pessoa pessoa1 = new PessoaFisica("111.111.111-11", "Fulano de tal", LocalDate.now());
 			Pessoa pessoa2 = new PessoaJuridica("11.111.111/0001-11","Razao social", "Nome fantasia");
 			Pessoa pessoa3 = new PessoaJuridica("00.000.000/0001-00","Razao 2", "Fantasia 2");
-			Pessoa pessoa4 = new PessoaFisica("teste cpf", "fulano de tal", LocalDateTime.now());
+			Pessoa pessoa4 = new PessoaFisica("teste cpf", "fulano de tal", LocalDate.now());
 			
 			pessoaController.insert(pessoa1);
 			pessoaController.insert(pessoa2);

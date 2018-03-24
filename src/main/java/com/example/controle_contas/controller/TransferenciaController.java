@@ -8,12 +8,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.controle_contas.controller.util.GeradorJson;
 import com.example.controle_contas.domain.Conta;
 import com.example.controle_contas.domain.ContaFilial;
+import com.example.controle_contas.domain.Transferencia;
 import com.example.controle_contas.exceptions.TransacaoInvalidaException;
 import com.example.controle_contas.service.ContaFilialService;
 import com.example.controle_contas.service.ContaService;
 import com.example.controle_contas.service.TransferenciaService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController
 @RequestMapping("/transferencias")
@@ -28,12 +31,15 @@ public class TransferenciaController {
 	@Autowired
 	private ContaFilialService contaFilialService;
 	
+	GeradorJson geradorJson;
+	
 	public TransferenciaController() {
-		// TODO Auto-generated constructor stub
+		geradorJson = new GeradorJson();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/criar")
-	public ResponseEntity<?> transferir(@RequestParam("idContaOrigem") Long idContaOrigem, @RequestParam("idContaDestino")  Long idContaDestino , @RequestParam("valor") Double valor){
+	public ResponseEntity<?> transferir(@RequestParam("idContaOrigem") Long idContaOrigem, 
+			@RequestParam("idContaDestino")  Long idContaDestino , @RequestParam("valor") Double valor) throws JsonProcessingException{
 		if(idContaOrigem == null || idContaDestino == null || valor == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -43,8 +49,8 @@ public class TransferenciaController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		try {
-			transferenciaService.transferir(contaOrigem, contaDestino, valor);
-			return new ResponseEntity<>(HttpStatus.OK);
+			Transferencia transferencia = transferenciaService.transferir(contaOrigem, contaDestino, valor);
+			return new ResponseEntity<>(geradorJson.gerarJson(transferencia),HttpStatus.OK);
 		} catch (TransacaoInvalidaException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}

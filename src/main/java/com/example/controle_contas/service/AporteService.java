@@ -54,7 +54,7 @@ public class AporteService extends AbstractService<Aporte>{
 		return codigo;
 	}
 
-	public void enviarAporte(Conta contaOrigem, ContaMatriz contaDestino, Double valor) throws TransacaoInvalidaException{
+	public Aporte enviarAporte(Conta contaOrigem, ContaMatriz contaDestino, Double valor) throws TransacaoInvalidaException{
 		validarAporte(contaOrigem, contaDestino, valor);
 		
 		Aporte aporte = new Aporte(contaOrigem,contaDestino,valor, gerarCodigoAporte(contaOrigem, contaDestino));
@@ -63,5 +63,6 @@ public class AporteService extends AbstractService<Aporte>{
 		contaDestino.acrescentarValor(valor);
 		contaService.update(contaOrigem);
 		contaService.update(contaDestino);
+		return aporte;
 	}
 }

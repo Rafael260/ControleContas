@@ -57,7 +57,7 @@ public class TransferenciaService extends AbstractService<Transferencia>{
 		}
 	}
 	
-	public void transferir(Conta contaOrigem, ContaFilial contaDestino, Double valor) throws TransacaoInvalidaException{
+	public Transferencia transferir(Conta contaOrigem, ContaFilial contaDestino, Double valor) throws TransacaoInvalidaException{
 		validarTransferencia(contaOrigem, contaDestino, valor);
 
 		contaOrigem.decrementarValor(valor);
@@ -69,6 +69,7 @@ public class TransferenciaService extends AbstractService<Transferencia>{
 		transferencia.setContaOrigem(contaOrigem);
 		transferencia.setValor(valor);
 		insert(transferencia);
+		return transferencia;
 	}
 
 }

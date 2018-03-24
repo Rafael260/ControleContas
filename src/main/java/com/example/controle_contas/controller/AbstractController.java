@@ -1,7 +1,5 @@
 package com.example.controle_contas.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,28 +8,35 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.example.controle_contas.controller.util.GeradorJson;
 import com.example.controle_contas.domain.AbstractEntity;
 import com.example.controle_contas.service.AbstractService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 public abstract class AbstractController<S extends AbstractService<E>, E extends AbstractEntity> {
 
 	@Autowired
 	protected S service;
 	
+	private GeradorJson geradorJson;
+	
 	public AbstractController() {
+		geradorJson = new GeradorJson();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<E> findAll(){
-		return this.service.findAll();
+	public String findAll() throws JsonProcessingException{
+		return geradorJson.gerarJson(this.service.findAll());
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<E> findById(@PathVariable("id") Long id) {
+	public ResponseEntity<String> findById(@PathVariable("id") Long id) throws JsonProcessingException {
 		System.out.println("Chamou o metodo de findById");
 		E element = this.service.findById(id);
 		if(element != null) {
-			return new ResponseEntity<E>(element,HttpStatus.OK);
+			String json = geradorJson.gerarJson(element);
+			return new ResponseEntity<String>(json,HttpStatus.OK);
 		}
 		else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -39,51 +44,20 @@ public abstract class AbstractController<S extends AbstractService<E>, E extends
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/insert", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public E insert(@RequestBody E entityObject) {
-//		onBeforeInsert(entityObject);
+	public String insert(@RequestBody E entityObject) throws JsonProcessingException {
 		entityObject = this.service.insert(entityObject);
-//		onAfterInsert(entityObject);
-		return entityObject;
+		return geradorJson.gerarJson(entityObject);
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public E update(@RequestBody E entityObject) {
-//		onBeforeUpdate(entityObject);
+	public String update(@RequestBody E entityObject) throws JsonProcessingException {
 		entityObject = this.service.update(entityObject);
-//		onAfterUpdate(entityObject);
-		return entityObject;
+		return geradorJson.gerarJson(entityObject);
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void delete(@RequestBody E entityObject) {
-//		onBeforeDelete(entityObject);
 		this.service.delete(entityObject);
-//		onAfterDelete(entityObject);
 	}
 	
-	
-//	//Metodos de ciclo de vida, para serem sobrescritos caso necessite
-//	public void onBeforeInsert(E entityToPersist) {
-//		
-//	}
-//	
-//	public void onAfterInsert(E entityPersisted) {
-//		
-//	}
-//	
-//	public void onBeforeUpdate(E entityToUpdate) {
-//		
-//	}
-//	
-//	public void onAfterUpdate(E entityUpdated) {
-//		
-//	}
-//	
-//	public void onBeforeDelete(E entityToDelete) {
-//		
-//	}
-//	
-//	public void onAfterDelete(E entityDeleted) {
-//		
-//	}
 }

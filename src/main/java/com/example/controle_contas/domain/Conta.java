@@ -1,6 +1,6 @@
 package com.example.controle_contas.domain;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -9,6 +9,18 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+
+@JsonTypeInfo(
+		  use = JsonTypeInfo.Id.NAME, 
+		  include = JsonTypeInfo.As.PROPERTY, 
+		  property = "type")
+		@JsonSubTypes({ 
+		  @Type(value = ContaMatriz.class, name = "conta_matriz"), 
+		  @Type(value = ContaFilial.class, name = "conta_filial")
+		})
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name="tipo_conta")
@@ -16,14 +28,16 @@ public abstract class Conta extends AbstractEntity{
 
 	protected String nome;
 	protected Double saldo;
-	protected LocalDateTime dataCriacao;
+	protected LocalDate dataCriacao;
 	
 	@OneToOne
 	@JoinColumn
 	protected Pessoa pessoa;
+	
 	protected SituacaoConta situacaoConta;
 	
 	public Conta() {
+		super();
 		this.saldo = 0.0;
 		this.situacaoConta = SituacaoConta.ATIVA;
 	}
@@ -50,10 +64,10 @@ public abstract class Conta extends AbstractEntity{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public LocalDateTime getDataCriacao() {
+	public LocalDate getDataCriacao() {
 		return dataCriacao;
 	}
-	public void setDataCriacao(LocalDateTime dataCriacao) {
+	public void setDataCriacao(LocalDate dataCriacao) {
 		this.dataCriacao = dataCriacao;
 	}
 	public Pessoa getPessoa() {
