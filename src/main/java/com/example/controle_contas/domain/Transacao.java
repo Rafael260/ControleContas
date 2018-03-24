@@ -12,9 +12,9 @@ import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name="tipo_transacao")
-public abstract class Transacao extends AbstractEntity {
+public abstract class Transacao extends AbstractEntity implements Comparable<Transacao>{
 
 	@NotNull
 	protected Double valor;
@@ -67,6 +67,11 @@ public abstract class Transacao extends AbstractEntity {
 
 	public void setEstornada(boolean estornada) {
 		this.estornada = estornada;
+	}
+	
+	@Override
+	public int compareTo(Transacao o) {
+		return this.data.compareTo(o.getData());
 	}
 
 }

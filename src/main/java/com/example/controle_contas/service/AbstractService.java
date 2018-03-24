@@ -10,21 +10,21 @@ import com.example.controle_contas.repository.AbstractRepository;
 
 public abstract class AbstractService<E extends AbstractEntity> {
 
-	protected AbstractRepository<E> repositorioGenerico;
+	protected AbstractRepository<E> repository;
 
-	public AbstractService(AbstractRepository<E> repositorio) {
-		this.repositorioGenerico = repositorio;
+	public AbstractService(AbstractRepository<E> repository) {
+		this.repository = repository;
 	}
 
 	public List<E> findAll() {
-		Iterable<E> all = this.repositorioGenerico.findAll();
+		Iterable<E> all = this.repository.findAll();
 		List<E> allInList = new ArrayList<>();
 		all.forEach(allInList::add);
 		return allInList;
 	}
 
 	public E findById(Long id) {
-		Optional<E> elementOptional = this.repositorioGenerico.findById(id);
+		Optional<E> elementOptional = this.repository.findById(id);
 		try {
 			return elementOptional.get();
 		}catch(NoSuchElementException e) {
@@ -36,7 +36,7 @@ public abstract class AbstractService<E extends AbstractEntity> {
 		if (entityObject != null) {
 			onBeforeInsert(entityObject);
 			entityObject.setId(null);
-			entityObject = this.repositorioGenerico.save(entityObject);
+			entityObject = this.repository.save(entityObject);
 			onAfterInsert(entityObject);
 			return entityObject;
 		} else {
@@ -49,7 +49,7 @@ public abstract class AbstractService<E extends AbstractEntity> {
 			return null;
 		} else {
 			onBeforeUpdate(entityObject);
-			entityObject = this.repositorioGenerico.save(entityObject);
+			entityObject = this.repository.save(entityObject);
 			onAfterUpdate(entityObject);
 			return entityObject;
 		}
@@ -58,7 +58,7 @@ public abstract class AbstractService<E extends AbstractEntity> {
 	public void delete(E entityObject) {
 		if (entityObject != null) {
 			onBeforeDelete(entityObject);
-			this.repositorioGenerico.delete(entityObject);
+			this.repository.delete(entityObject);
 			onAfterDelete(entityObject);
 		}
 	}

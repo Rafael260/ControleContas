@@ -1,14 +1,14 @@
 package com.example.controle_contas.domain;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("aporte")
 public class Aporte extends Transferencia {
 
-	@NotNull
+	@Column(unique = true, nullable = false)
 	private String codigo;
 	
 	public Aporte() {
