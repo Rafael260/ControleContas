@@ -14,5 +14,4 @@ public class ContaMatriz extends Conta {
 	public ContaMatriz(String nome, Pessoa pessoa) {
 		super(nome, pessoa);
 	}
-
 }

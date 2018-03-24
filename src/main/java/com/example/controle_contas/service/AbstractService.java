@@ -1,6 +1,10 @@
 package com.example.controle_contas.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import com.example.controle_contas.domain.AbstractEntity;
 import com.example.controle_contas.repository.AbstractRepository;
 
@@ -13,11 +17,19 @@ public abstract class AbstractService<E extends AbstractEntity> {
 	}
 
 	public List<E> findAll() {
-		return this.repositorioGenerico.findAll();
+		Iterable<E> all = this.repositorioGenerico.findAll();
+		List<E> allInList = new ArrayList<>();
+		all.forEach(allInList::add);
+		return allInList;
 	}
 
 	public E findById(Long id) {
-		return this.repositorioGenerico.getOne(id);
+		Optional<E> elementOptional = this.repositorioGenerico.findById(id);
+		try {
+			return elementOptional.get();
+		}catch(NoSuchElementException e) {
+			return null;
+		}
 	}
 
 	public E insert(E entityObject) {

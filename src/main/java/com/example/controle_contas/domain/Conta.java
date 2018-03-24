@@ -14,14 +14,13 @@ import javax.persistence.OneToOne;
 @DiscriminatorColumn(name="tipo_conta")
 public abstract class Conta extends AbstractEntity{
 
-	protected String numero;
+	protected String nome;
 	protected Double saldo;
 	protected LocalDateTime dataCriacao;
 	
 	@OneToOne
 	@JoinColumn
 	protected Pessoa pessoa;
-//	protected List<ContaFilial> contasFilhas;
 	protected SituacaoConta situacaoConta;
 	
 	public Conta() {
@@ -32,9 +31,8 @@ public abstract class Conta extends AbstractEntity{
 	public Conta(String numero, Pessoa pessoa) {
 		super();
 		this.saldo = 0.0;
-		this.numero = numero;
+		this.nome = numero;
 		this.pessoa = pessoa;
-//		this.contasFilhas = new LinkedList<>();
 		this.situacaoConta = SituacaoConta.ATIVA;
 	}
 	
@@ -46,11 +44,11 @@ public abstract class Conta extends AbstractEntity{
 		this.saldo = saldo;
 	}
 
-	public String getNumero() {
-		return numero;
+	public String getNome() {
+		return nome;
 	}
-	public void setNumero(String numero) {
-		this.numero = numero;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 	public LocalDateTime getDataCriacao() {
 		return dataCriacao;
@@ -83,6 +81,15 @@ public abstract class Conta extends AbstractEntity{
 	
 	public boolean estaAtiva() {
 		return this.situacaoConta.equals(SituacaoConta.ATIVA);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || !(obj instanceof ContaMatriz || obj instanceof ContaFilial)) {
+			return false;
+		}
+		Conta outraConta = (Conta) obj;
+		return this.id.equals(outraConta.getId());
 	}
 	
 }
