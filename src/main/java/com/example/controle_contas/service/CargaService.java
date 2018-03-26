@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.example.controle_contas.domain.Carga;
 import com.example.controle_contas.domain.Conta;
 import com.example.controle_contas.exceptions.TransacaoInvalidaException;
+import com.example.controle_contas.exceptions.TransacaoJaEstornadaException;
 import com.example.controle_contas.repository.CargaRepository;
 
 @Service
@@ -41,6 +42,18 @@ public class CargaService extends AbstractService<Carga>{
 		carga.setContaEnvolvida(conta);
 		carga.setValor(valor);
 		transacaoService.insert(carga);
+		return carga;
+	}
+	
+	public Carga estornarCarga(Carga carga) throws TransacaoJaEstornadaException{
+		if(carga.isEstornada()) {
+			throw new TransacaoJaEstornadaException("A carga já foi estornada");
+		}
+		carga.setEstornada(true);
+		Conta conta = carga.getContaEnvolvida();
+		conta.decrementarValor(carga.getValor());
+		contaService.update(conta);
+		update(carga);
 		return carga;
 	}
 }

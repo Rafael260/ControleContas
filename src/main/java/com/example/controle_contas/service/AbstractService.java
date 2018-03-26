@@ -1,10 +1,7 @@
 package com.example.controle_contas.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
 import com.example.controle_contas.domain.AbstractEntity;
 import com.example.controle_contas.repository.AbstractRepository;
 
@@ -16,11 +13,8 @@ public abstract class AbstractService<E extends AbstractEntity> {
 		this.repository = repository;
 	}
 
-	public List<E> findAll() {
-		Iterable<E> all = this.repository.findAll();
-		List<E> allInList = new ArrayList<>();
-		all.forEach(allInList::add);
-		return allInList;
+	public Iterable<E> findAll() {
+		return this.repository.findAll();
 	}
 
 	public E findById(Long id) {
@@ -55,6 +49,7 @@ public abstract class AbstractService<E extends AbstractEntity> {
 		}
 	}
 
+	//TODO retornar algum feedback sobre a operação
 	public void delete(E entityObject) {
 		if (entityObject != null) {
 			onBeforeDelete(entityObject);

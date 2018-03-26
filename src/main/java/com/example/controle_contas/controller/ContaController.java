@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.controle_contas.controller.util.GeradorJson;
 import com.example.controle_contas.domain.Conta;
 import com.example.controle_contas.domain.Transacao;
 import com.example.controle_contas.service.ContaService;
@@ -24,10 +23,8 @@ public class ContaController extends AbstractController<ContaService, Conta>{
 	@Autowired
 	private TransacaoService transacaoService;
 	
-	GeradorJson geradorJson;
 	
 	public ContaController() {
-		geradorJson = new GeradorJson();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value= "/{id}/historico")
@@ -40,6 +37,6 @@ public class ContaController extends AbstractController<ContaService, Conta>{
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		List<Transacao> historicoDaConta = transacaoService.coletarHistoricoDaConta(conta);
-		return new ResponseEntity<>(geradorJson.gerarJson(historicoDaConta),HttpStatus.OK);
+		return new ResponseEntity<>(historicoDaConta,HttpStatus.OK);
 	}
 }

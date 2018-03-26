@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.controle_contas.controller.util.GeradorJson;
 import com.example.controle_contas.domain.Aporte;
 import com.example.controle_contas.domain.Conta;
 import com.example.controle_contas.domain.ContaMatriz;
 import com.example.controle_contas.exceptions.TransacaoInvalidaException;
+import com.example.controle_contas.exceptions.TransacaoJaEstornadaException;
 import com.example.controle_contas.service.AporteService;
 import com.example.controle_contas.service.ContaMatrizService;
 import com.example.controle_contas.service.ContaService;
@@ -31,15 +31,13 @@ public class AporteController {
 	@Autowired
 	private ContaMatrizService contaMatrizService;
 
-	GeradorJson geradorJson;
-	
 	public AporteController() {
-		geradorJson = new GeradorJson();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/criar")
 	public ResponseEntity<?> criar(@RequestParam("idContaOrigem") Long idContaOrigem,
-			@RequestParam("idContaDestino") Long idContaDestino, @RequestParam("valor") Double valor) throws JsonProcessingException {
+			@RequestParam("idContaDestino") Long idContaDestino, @RequestParam("valor") Double valor)
+			throws JsonProcessingException {
 		if (idContaOrigem == null || idContaDestino == null || valor == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -50,8 +48,27 @@ public class AporteController {
 		}
 		try {
 			Aporte aporte = aporteService.enviarAporte(contaOrigem, contaDestino, valor);
-			return new ResponseEntity<String>(geradorJson.gerarJson(aporte),HttpStatus.OK);
+			return new ResponseEntity<>(aporte, HttpStatus.OK);
 		} catch (TransacaoInvalidaException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+
+	}
+
+	// Nesse caso, convém um PUT
+	@RequestMapping(method = RequestMethod.GET, value = "/estornar")
+	public ResponseEntity<?> estornar(@RequestParam("codigoAporte") String codigoAporte) {
+		if (codigoAporte == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		Aporte aporte = aporteService.findByCodigo(codigoAporte);
+		if (aporte == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		try {
+			aporte = aporteService.estornarAporte(aporte);
+			return new ResponseEntity<>(aporte, HttpStatus.OK);
+		} catch (TransacaoJaEstornadaException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		

@@ -10,6 +10,7 @@ import com.example.controle_contas.domain.ContaFilial;
 import com.example.controle_contas.domain.ContaMatriz;
 import com.example.controle_contas.domain.Transferencia;
 import com.example.controle_contas.exceptions.TransacaoInvalidaException;
+import com.example.controle_contas.exceptions.TransacaoJaEstornadaException;
 import com.example.controle_contas.repository.TransferenciaRepository;
 
 @Service
@@ -69,6 +70,22 @@ public class TransferenciaService extends AbstractService<Transferencia>{
 		transferencia.setContaOrigem(contaOrigem);
 		transferencia.setValor(valor);
 		insert(transferencia);
+		return transferencia;
+	}
+
+	public Transferencia estornarTransferencia(Transferencia transferencia) throws TransacaoJaEstornadaException{
+		if(transferencia.isEstornada()) {
+			throw new TransacaoJaEstornadaException("A transferencia já foi estornada");
+		}
+		
+		Conta contaOrigem = transferencia.getContaOrigem();
+		Conta contaDestino = transferencia.getContaEnvolvida();
+		transferencia.setEstornada(true);
+		contaOrigem.acrescentarValor(transferencia.getValor());
+		contaDestino.decrementarValor(transferencia.getValor());
+		contaService.update(contaOrigem);
+		contaService.update(contaDestino);
+		update(transferencia);
 		return transferencia;
 	}
 

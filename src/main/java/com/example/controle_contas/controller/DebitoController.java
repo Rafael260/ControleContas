@@ -7,11 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.example.controle_contas.controller.util.GeradorJson;
 import com.example.controle_contas.domain.Conta;
 import com.example.controle_contas.domain.Debito;
 import com.example.controle_contas.exceptions.TransacaoInvalidaException;
+import com.example.controle_contas.exceptions.TransacaoJaEstornadaException;
 import com.example.controle_contas.service.ContaService;
 import com.example.controle_contas.service.DebitoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,10 +25,8 @@ public class DebitoController {
 	@Autowired
 	private DebitoService debitoService;
 	
-	GeradorJson geradorJson;
 	
 	public DebitoController() {
-		geradorJson = new GeradorJson();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value="/criar")
@@ -43,9 +40,28 @@ public class DebitoController {
 		}
 		try {
 			Debito debito = debitoService.debitarConta(conta, valor);
-			return new ResponseEntity<>(geradorJson.gerarJson(debito),HttpStatus.OK);
+			return new ResponseEntity<>(debito,HttpStatus.OK);
 		} catch (TransacaoInvalidaException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	//Nesse caso, convém um PUT
+		@RequestMapping(method = RequestMethod.GET, value = "/estornar")
+		public ResponseEntity<?> estornar(@RequestParam("idDebito") Long idDebito){
+			if(idDebito == null) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+			Debito debito = debitoService.findById(idDebito);
+			if(debito == null) {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+			try {
+				debito = debitoService.estornarDebito(debito);
+				return new ResponseEntity<>(debito,HttpStatus.OK);
+			} catch (TransacaoJaEstornadaException e) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+			
+		}
 }

@@ -4,10 +4,17 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 @Entity
 @DiscriminatorValue("pessoa_juridica")
+@JsonTypeName("pessoa_juridica")
 public class PessoaJuridica extends Pessoa {
 
+	@JsonProperty("type")
+	private final String type = "pessoa_juridica";
+	
 	@NotNull
 	private String cnpj;
 	

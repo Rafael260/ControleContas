@@ -4,10 +4,17 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 @Entity
 @DiscriminatorValue("conta_filial")
+@JsonTypeName("conta_filial")
 public class ContaFilial extends Conta {
 
+	@JsonProperty("type")
+	private final String type = "conta_filial";
+	
 	@ManyToOne
 	private Conta contaPai;
 	

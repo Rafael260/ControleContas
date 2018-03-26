@@ -4,10 +4,17 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 @Entity
 @DiscriminatorValue("transferencia")
+@JsonTypeName("transferencia")
 public class Transferencia extends Transacao {
 
+	@JsonProperty("type")
+	private final String type = "transferencia";
+	
 	@ManyToOne
 	protected Conta contaOrigem;
 	

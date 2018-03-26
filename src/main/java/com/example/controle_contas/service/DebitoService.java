@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.example.controle_contas.domain.Conta;
 import com.example.controle_contas.domain.Debito;
 import com.example.controle_contas.exceptions.TransacaoInvalidaException;
+import com.example.controle_contas.exceptions.TransacaoJaEstornadaException;
 import com.example.controle_contas.repository.DebitoRepository;
 
 @Service
@@ -41,6 +42,18 @@ public class DebitoService extends AbstractService<Debito>{
 		debito.setContaEnvolvida(conta);
 		debito.setValor(valor);
 		insert(debito);
+		return debito;
+	}
+	
+	public Debito estornarDebito(Debito debito) throws TransacaoJaEstornadaException{
+		if(debito.isEstornada()) {
+			throw new TransacaoJaEstornadaException("O debito ja foi estornado");
+		}
+		debito.setEstornada(true);
+		Conta conta = debito.getContaEnvolvida();
+		conta.acrescentarValor(debito.getValor());
+		contaService.update(conta);
+		update(debito);
 		return debito;
 	}
 

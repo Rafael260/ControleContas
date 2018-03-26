@@ -8,6 +8,7 @@ import com.example.controle_contas.domain.Aporte;
 import com.example.controle_contas.domain.Conta;
 import com.example.controle_contas.domain.ContaMatriz;
 import com.example.controle_contas.exceptions.TransacaoInvalidaException;
+import com.example.controle_contas.exceptions.TransacaoJaEstornadaException;
 import com.example.controle_contas.repository.AporteRepository;
 
 @Service
@@ -28,6 +29,10 @@ public class AporteService extends AbstractService<Aporte>{
 	public void onBeforeInsert(Aporte entityToPersist) {
 		entityToPersist.setData(LocalDateTime.now());
 		super.onBeforeInsert(entityToPersist);
+	}
+	
+	public Aporte findByCodigo(String codigo) {
+		return codigo != null ? aporteRepository.findByCodigo(codigo) : null;
 	}
 	
 	private void validarAporte(Conta contaOrigem, ContaMatriz contaDestino, Double valor) throws TransacaoInvalidaException{
@@ -63,6 +68,20 @@ public class AporteService extends AbstractService<Aporte>{
 		contaDestino.acrescentarValor(valor);
 		contaService.update(contaOrigem);
 		contaService.update(contaDestino);
+		return aporte;
+	}
+
+	public Aporte estornarAporte(Aporte aporte) throws TransacaoJaEstornadaException{
+		if(aporte.isEstornada()) {
+			throw new TransacaoJaEstornadaException("O aporte já está estornado");
+		}
+		Conta contaOrigem = aporte.getContaOrigem();
+		Conta contaDestino = aporte.getContaEnvolvida();
+		contaOrigem.acrescentarValor(aporte.getValor());
+		contaDestino.decrementarValor(aporte.getValor());
+		contaService.update(contaOrigem);
+		contaService.update(contaDestino);
+		aporte.setEstornada(true);
 		return aporte;
 	}
 }
