@@ -7,18 +7,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @Entity
-@DiscriminatorValue("carga")
-@JsonTypeName("carga")
-public class Carga extends Transacao {
+@DiscriminatorValue("debito")
+@JsonTypeName("debito")
+public class Debito extends Transacao {
 
 	@JsonProperty("type")
-	private final String type = "carga";
+	private final String type = "debito";
 	
-	public Carga() {
+	public Debito() {
 		super();
 	}
-	
-	public Carga(Conta contaEnvolvida, Double valor) {
+
+	public Debito(Conta contaEnvolvida, Double valor) {
 		super(contaEnvolvida, valor);
+		// TODO Auto-generated constructor stub
 	}
+
 }

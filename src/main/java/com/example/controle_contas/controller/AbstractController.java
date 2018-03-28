@@ -1,84 +1,56 @@
 package com.example.controle_contas.controller;
 
-import java.util.List;
-
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import com.example.controle_contas.domain.AbstractEntity;
 import com.example.controle_contas.service.AbstractService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 public abstract class AbstractController<S extends AbstractService<E>, E extends AbstractEntity> {
 
 	@Autowired
 	protected S service;
-	
+
 	public AbstractController() {
 	}
 
-	@GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<E> findAll(){
+	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Iterable<E> findAll() throws JsonProcessingException {
 		return this.service.findAll();
 	}
-	
-	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public E findById(@PathParam("id") Long id) {
-		return this.service.findById(id);
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> findById(@PathVariable("id") Long id) throws JsonProcessingException {
+		System.out.println("Chamou o metodo de findById");
+		E element = this.service.findById(id);
+		if (element != null) {
+			return new ResponseEntity<>(element, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
-	
-	@PostMapping(value = "/insert", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public E insert(@RequestBody E entityObject) {
-		onBeforeInsert(entityObject);
+
+	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public E insert(@RequestBody E entityObject) throws JsonProcessingException {
 		entityObject = this.service.insert(entityObject);
-		onAfterInsert(entityObject);
 		return entityObject;
 	}
-	
-	@PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public E update(@RequestBody E entityObject) {
-		onBeforeUpdate(entityObject);
+
+	@RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public E update(@RequestBody E entityObject) throws JsonProcessingException {
 		entityObject = this.service.update(entityObject);
-		onAfterUpdate(entityObject);
 		return entityObject;
 	}
-	
-	@DeleteMapping(value = "/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
+
+	@RequestMapping(method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void delete(@RequestBody E entityObject) {
-		onBeforeDelete(entityObject);
 		this.service.delete(entityObject);
-		onAfterDelete(entityObject);
 	}
-	
-	
-	//Metodos de ciclo de vida, para serem sobrescritos caso necessite
-	public void onBeforeInsert(E entityToPersist) {
-		
-	}
-	
-	public void onAfterInsert(E entityPersisted) {
-		
-	}
-	
-	public void onBeforeUpdate(E entityToUpdate) {
-		
-	}
-	
-	public void onAfterUpdate(E entityUpdated) {
-		
-	}
-	
-	public void onBeforeDelete(E entityToDelete) {
-		
-	}
-	
-	public void onAfterDelete(E entityDeleted) {
-		
-	}
+
 }

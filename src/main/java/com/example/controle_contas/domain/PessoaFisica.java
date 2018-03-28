@@ -1,26 +1,36 @@
 package com.example.controle_contas.domain;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 @Entity
+@DiscriminatorValue("pessoa_fisica")
+@JsonTypeName("pessoa_fisica")
 public class PessoaFisica extends Pessoa {
 
+	@JsonProperty("type")
+	private final String type = "pessoa_fisica";
+	
 	@NotNull
 	private String cpf;
 	
 	@NotNull
 	private String nomeCompleto;
 	
-	private LocalDateTime dataNascimento;
+	private LocalDate dataNascimento;
 	
 	public PessoaFisica() {
-		
+		super();
 	}
 	
-	public PessoaFisica(String cpf, String nomeCompleto, LocalDateTime dataNascimento) {
+	public PessoaFisica(String cpf, String nomeCompleto, LocalDate dataNascimento) {
+		super();
 		this.cpf = cpf;
 		this.nomeCompleto = nomeCompleto;
 		this.dataNascimento = dataNascimento;
@@ -42,11 +52,11 @@ public class PessoaFisica extends Pessoa {
 		this.nomeCompleto = nomeCompleto;
 	}
 
-	public LocalDateTime getDataNascimento() {
+	public LocalDate getDataNascimento() {
 		return dataNascimento;
 	}
 
-	public void setDataNascimento(LocalDateTime dataNascimento) {
+	public void setDataNascimento(LocalDate dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
 	

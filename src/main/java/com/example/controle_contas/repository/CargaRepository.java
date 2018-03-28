@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import com.example.controle_contas.domain.Carga;
 
 @Repository
-public interface CargaRepository extends TransacaoRepository<Carga>{
+public interface CargaRepository extends AbstractRepository<Carga>{
 
 }

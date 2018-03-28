@@ -1,6 +1,6 @@
 package com.example.controle_contas;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -31,15 +31,32 @@ public class ControleContasApplication {
 	@Bean
 	public CommandLineRunner init(PessoaController pessoaController, ContaController contaController) {
 		return (args) -> {
-			Pessoa pessoa1 = new PessoaFisica("111.111.111-11", "Fulano de tal", LocalDateTime.now());
+			Pessoa pessoa1 = new PessoaFisica("111.111.111-11", "Fulano de tal", LocalDate.now());
 			Pessoa pessoa2 = new PessoaJuridica("11.111.111/0001-11","Razao social", "Nome fantasia");
+			Pessoa pessoa3 = new PessoaJuridica("00.000.000/0001-00","Razao 2", "Fantasia 2");
+			Pessoa pessoa4 = new PessoaFisica("teste cpf", "fulano de tal", LocalDate.now());
+			
 			pessoaController.insert(pessoa1);
 			pessoaController.insert(pessoa2);
+			pessoaController.insert(pessoa3);
+			pessoaController.insert(pessoa4);
+			
 			Conta conta1 = new ContaMatriz("nome teste", pessoa1);
 			ContaFilial conta2 = new ContaFilial("nome filial", pessoa2);
 			conta2.setContaPai(conta1);
+			Conta conta3 = new ContaMatriz("nome teste 2", pessoa3);
+			ContaFilial conta4 = new ContaFilial("nome teste 3", pessoa4);
+			conta4.setContaPai(conta3);
+			
+			conta1.setSaldo(2000.0);
+			conta2.setSaldo(2000.0);
+			conta3.setSaldo(2000.0);
+			conta4.setSaldo(2000.0);
+			
 			contaController.insert(conta1);
 			contaController.insert(conta2);
+			contaController.insert(conta3);
+			contaController.insert(conta4);
 		};
 	}
 }

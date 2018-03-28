@@ -1,11 +1,20 @@
 package com.example.controle_contas.domain;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 @Entity
+@DiscriminatorValue("pessoa_juridica")
+@JsonTypeName("pessoa_juridica")
 public class PessoaJuridica extends Pessoa {
 
+	@JsonProperty("type")
+	private final String type = "pessoa_juridica";
+	
 	@NotNull
 	private String cnpj;
 	
@@ -16,7 +25,7 @@ public class PessoaJuridica extends Pessoa {
 	private String nomeFantasia;
 	
 	public PessoaJuridica() {
-		
+		super();
 	}
 	
 	public PessoaJuridica(String cnpj, String razaoSocial, String nomeFantasia) {

@@ -1,12 +1,21 @@
 package com.example.controle_contas.domain;
 
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @Entity
+@DiscriminatorValue("aporte")
+@JsonTypeName("aporte")
 public class Aporte extends Transferencia {
 
-	@NotNull
+	@JsonProperty("type")
+	private final String type = "aporte";
+	
+	@Column(unique = true, nullable = false)
 	private String codigo;
 	
 	public Aporte() {
