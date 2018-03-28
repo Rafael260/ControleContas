@@ -3,11 +3,10 @@ package com.example.controle_contas.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.controle_contas.domain.Aporte;
 import com.example.controle_contas.domain.Conta;
 import com.example.controle_contas.domain.ContaMatriz;
@@ -34,10 +33,9 @@ public class AporteController {
 	public AporteController() {
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/criar")
-	public ResponseEntity<?> criar(@RequestParam("idContaOrigem") Long idContaOrigem,
-			@RequestParam("idContaDestino") Long idContaDestino, @RequestParam("valor") Double valor)
-			throws JsonProcessingException {
+	@RequestMapping(method = RequestMethod.POST, value = "/criar")
+	public ResponseEntity<?> criar(@RequestBody Long idContaOrigem, @RequestBody Long idContaDestino,
+			@RequestBody Double valor) throws JsonProcessingException {
 		if (idContaOrigem == null || idContaDestino == null || valor == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -55,9 +53,8 @@ public class AporteController {
 
 	}
 
-	// Nesse caso, convém um PUT
-	@RequestMapping(method = RequestMethod.GET, value = "/estornar")
-	public ResponseEntity<?> estornar(@RequestParam("codigoAporte") String codigoAporte) {
+	@RequestMapping(method = RequestMethod.PUT, value = "/estornar")
+	public ResponseEntity<?> estornar(@RequestBody String codigoAporte) {
 		if (codigoAporte == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -71,7 +68,7 @@ public class AporteController {
 		} catch (TransacaoJaEstornadaException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		
+
 	}
 
 }
