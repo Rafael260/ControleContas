@@ -3,38 +3,30 @@ package com.example.controle_contas.domain;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @DiscriminatorValue("conta_filial")
 @JsonTypeName("conta_filial")
+@NoArgsConstructor
 public class ContaFilial extends Conta {
 
 	@JsonProperty("type")
 	private final String type = "conta_filial";
 	
 	@ManyToOne
+	@Getter
+	@Setter
 	private Conta contaPai;
-	
-	public ContaFilial() {
-		super();
-	}
 	
 	public ContaFilial(String nome, Pessoa pessoa) {
 		super(nome, pessoa);
-		// TODO Auto-generated constructor stub
 	}
 
-	public Conta getContaPai() {
-		return contaPai;
-	}
-
-	public void setContaPai(Conta contaPai) {
-		this.contaPai = contaPai;
-	}
-	
 	public ContaMatriz coletarContaMatriz() {
 		return coletarContaMatriz(this);
 	}
@@ -48,5 +40,4 @@ public class ContaFilial extends Conta {
 			return coletarContaMatriz((ContaFilial)contaPai);
 		}
 	}
-
 }

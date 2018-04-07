@@ -4,9 +4,9 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import lombok.NoArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
@@ -15,9 +15,5 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "tipo_pessoa")
-public abstract class Pessoa extends AbstractEntity {
-
-	public Pessoa() {
-
-	}
-}
+@NoArgsConstructor
+public abstract class Pessoa extends AbstractEntity {}

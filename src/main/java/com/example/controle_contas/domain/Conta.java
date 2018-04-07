@@ -1,17 +1,17 @@
 package com.example.controle_contas.domain;
 
 import java.time.LocalDate;
-
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import lombok.Getter;
+import lombok.Setter;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({ @Type(value = ContaMatriz.class, name = "conta_matriz"),
@@ -20,10 +20,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "tipo_conta")
 public abstract class Conta extends AbstractEntity {
-
-	protected String nome;
-	protected Double saldo;
-	protected LocalDate dataCriacao;
+	
+	@Getter @Setter protected String nome;
+	@Getter @Setter protected Double saldo;
+	@Getter @Setter protected LocalDate dataCriacao;
 
 	@OneToOne
 	@JoinColumn
@@ -43,46 +43,6 @@ public abstract class Conta extends AbstractEntity {
 		this.nome = numero;
 		this.pessoa = pessoa;
 		this.situacaoConta = SituacaoConta.ATIVA;
-	}
-
-	public Double getSaldo() {
-		return saldo;
-	}
-
-	public void setSaldo(Double saldo) {
-		this.saldo = saldo;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public LocalDate getDataCriacao() {
-		return dataCriacao;
-	}
-
-	public void setDataCriacao(LocalDate dataCriacao) {
-		this.dataCriacao = dataCriacao;
-	}
-
-	public Pessoa getPessoa() {
-		return pessoa;
-	}
-
-	public void setPessoa(Pessoa pessoa) {
-		this.pessoa = pessoa;
-	}
-
-	public SituacaoConta getSituacaoConta() {
-		return situacaoConta;
-	}
-
-	public void setSituacaoConta(SituacaoConta situacaoConta) {
-		this.situacaoConta = situacaoConta;
 	}
 
 	public void acrescentarValor(Double valor) {

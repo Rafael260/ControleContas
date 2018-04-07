@@ -8,9 +8,10 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
-
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import lombok.Getter;
+import lombok.Setter;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
@@ -22,14 +23,22 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 public abstract class Transacao extends AbstractEntity implements Comparable<Transacao> {
 
 	@NotNull
+	@Getter
+	@Setter
 	protected Double valor;
 
 	@ManyToOne
+	@Getter
+	@Setter
 	protected Conta contaEnvolvida;
 
 	@CreatedDate
+	@Getter
+	@Setter
 	protected LocalDateTime data;
 
+	@Getter
+	@Setter
 	protected boolean estornada;
 
 	public Transacao() {
@@ -42,41 +51,8 @@ public abstract class Transacao extends AbstractEntity implements Comparable<Tra
 		estornada = false;
 	}
 
-	public Double getValor() {
-		return valor;
-	}
-
-	public void setValor(Double valor) {
-		this.valor = valor;
-	}
-
-	public Conta getContaEnvolvida() {
-		return contaEnvolvida;
-	}
-
-	public void setContaEnvolvida(Conta contaEnvolvida) {
-		this.contaEnvolvida = contaEnvolvida;
-	}
-
-	public LocalDateTime getData() {
-		return data;
-	}
-
-	public void setData(LocalDateTime data) {
-		this.data = data;
-	}
-
-	public boolean isEstornada() {
-		return estornada;
-	}
-
-	public void setEstornada(boolean estornada) {
-		this.estornada = estornada;
-	}
-
 	@Override
 	public int compareTo(Transacao o) {
 		return this.data.compareTo(o.getData());
 	}
-
 }
