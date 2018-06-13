@@ -27,13 +27,8 @@ public abstract class AbstractController<S extends AbstractService<E>, E extends
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> findById(@PathVariable("id") Long id) throws JsonProcessingException {
-		System.out.println("Chamou o metodo de findById");
 		E element = this.service.findById(id);
-		if (element != null) {
-			return new ResponseEntity<>(element, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		return new ResponseEntity<>(element, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -52,5 +47,4 @@ public abstract class AbstractController<S extends AbstractService<E>, E extends
 	public void delete(@RequestBody E entityObject) {
 		this.service.delete(entityObject);
 	}
-
 }

@@ -2,11 +2,13 @@ package com.example.controle_contas.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.controle_contas.domain.Aporte;
 import com.example.controle_contas.domain.Conta;
 import com.example.controle_contas.domain.ContaMatriz;
+import com.example.controle_contas.exceptions.ResourceNotFoundException;
 import com.example.controle_contas.exceptions.TransacaoInvalidaException;
 import com.example.controle_contas.exceptions.TransacaoJaEstornadaException;
 import com.example.controle_contas.repository.AporteRepository;
@@ -32,7 +34,8 @@ public class AporteService extends AbstractService<Aporte>{
 	}
 	
 	public Aporte findByCodigo(String codigo) {
-		return codigo != null ? aporteRepository.findByCodigo(codigo) : null;
+		return aporteRepository.findByCodigo(codigo).
+				orElseThrow(()-> new ResourceNotFoundException());
 	}
 	
 	private void validarAporte(Conta contaOrigem, ContaMatriz contaDestino, Double valor) throws TransacaoInvalidaException{

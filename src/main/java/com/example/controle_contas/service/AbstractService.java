@@ -1,8 +1,7 @@
 package com.example.controle_contas.service;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import com.example.controle_contas.domain.AbstractEntity;
+import com.example.controle_contas.exceptions.ResourceNotFoundException;
 import com.example.controle_contas.repository.AbstractRepository;
 
 public abstract class AbstractService<E extends AbstractEntity> {
@@ -18,35 +17,22 @@ public abstract class AbstractService<E extends AbstractEntity> {
 	}
 
 	public E findById(Long id) {
-		Optional<E> elementOptional = this.repository.findById(id);
-		try {
-			return elementOptional.get();
-		}catch(NoSuchElementException e) {
-			return null;
-		}
+		return this.repository.findById(id).orElseThrow(() -> new ResourceNotFoundException());
 	}
 
 	public E insert(E entityObject) {
-		if (entityObject != null) {
-			onBeforeInsert(entityObject);
-			entityObject.setId(null);
-			entityObject = this.repository.save(entityObject);
-			onAfterInsert(entityObject);
-			return entityObject;
-		} else {
-			return null;
-		}
+		onBeforeInsert(entityObject);
+		entityObject.setId(null);
+		entityObject = this.repository.save(entityObject);
+		onAfterInsert(entityObject);
+		return entityObject;
 	}
 
 	public E update(E entityObject) {
-		if (entityObject == null || entityObject.getId() == null) {
-			return null;
-		} else {
-			onBeforeUpdate(entityObject);
-			entityObject = this.repository.save(entityObject);
-			onAfterUpdate(entityObject);
-			return entityObject;
-		}
+		onBeforeUpdate(entityObject);
+		entityObject = this.repository.save(entityObject);
+		onAfterUpdate(entityObject);
+		return entityObject;
 	}
 
 	//TODO retornar algum feedback sobre a operação

@@ -5,7 +5,6 @@ import java.io.IOException;
 public class TesteConsumo {
 
 	public TesteConsumo() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public static void main(String[] args) {

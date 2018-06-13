@@ -10,9 +10,6 @@ import com.example.controle_contas.service.PessoaService;
 @RequestMapping("/pessoas")
 public class PessoaController extends AbstractController<PessoaService, Pessoa>{
 
-	
 	public PessoaController() {
-		// TODO Auto-generated constructor stub
 	}
-
 }

@@ -28,13 +28,7 @@ public class ContaController extends AbstractController<ContaService, Conta> {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/historico")
 	public ResponseEntity<?> coletarHistorico(@PathVariable("id") Long idConta) throws JsonProcessingException {
-		if (idConta == null) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
 		Conta conta = service.findById(idConta);
-		if (conta == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
 		List<Transacao> historicoDaConta = transacaoService.coletarHistoricoDaConta(conta);
 		return new ResponseEntity<>(historicoDaConta, HttpStatus.OK);
 	}

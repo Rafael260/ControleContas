@@ -1,5 +1,7 @@
 package com.example.controle_contas.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.controle_contas.controller.dto.TransacaoDTO;
 import com.example.controle_contas.domain.Carga;
 import com.example.controle_contas.domain.Conta;
 import com.example.controle_contas.exceptions.TransacaoInvalidaException;
@@ -29,38 +33,25 @@ public class CargaController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/criar")
-	public ResponseEntity<?> carregar(@RequestBody Long idConta, @RequestBody Double valor)
+	public ResponseEntity<?> carregar(@Valid @RequestBody TransacaoDTO transacaoDTO)
 			throws JsonProcessingException {
-		if (idConta == null || valor == null) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		Conta conta = contaService.findById(idConta);
-		if (conta == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		Conta conta = contaService.findById(transacaoDTO.getIdConta());
 		try {
-			Carga carga = cargaService.carregarConta(conta, valor);
+			Carga carga = cargaService.carregarConta(conta, transacaoDTO.getValor());
 			return new ResponseEntity<>(carga, HttpStatus.OK);
 		} catch (TransacaoInvalidaException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/estornar")
+	@RequestMapping(method = RequestMethod.PUT, value = "{idCarga}/estornar")
 	public ResponseEntity<?> estornar(@RequestBody Long idCarga) {
-		if (idCarga == null) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
 		Carga carga = cargaService.findById(idCarga);
-		if (carga == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
 		try {
 			carga = cargaService.estornarCarga(carga);
 			return new ResponseEntity<>(carga, HttpStatus.OK);
 		} catch (TransacaoJaEstornadaException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-
 	}
 }
