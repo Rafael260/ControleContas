@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
 import com.example.controle_contas.controller.ContaController;
 import com.example.controle_contas.controller.PessoaController;
 import com.example.controle_contas.domain.Conta;
@@ -19,9 +21,11 @@ import com.example.controle_contas.domain.PessoaFisica;
 import com.example.controle_contas.domain.PessoaJuridica;
 
 @SpringBootApplication
-@ComponentScan({"com.example.controle_contas.service","com.example.controle_contas.controller"})
+@ComponentScan({"com.example.controle_contas.service","com.example.controle_contas.controller",
+	"com.example.controle_contas.jobs"})
 @EnableJpaRepositories(basePackages = "com.example.controle_contas.repository")
 @EntityScan(basePackages = "com.example.controle_contas.domain")
+@EnableScheduling
 public class ControleContasApplication {
 
 	public static void main(String[] args) {

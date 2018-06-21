@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @DiscriminatorValue("pessoa_fisica")
 @JsonTypeName("pessoa_fisica")
 @NoArgsConstructor
+@ToString
 public class PessoaFisica extends Pessoa {
 
 	@JsonProperty("type")
